@@ -1,41 +1,17 @@
-def gv
-
-pipeline {   
-    agent any
-    tools {
-        maven 'Maven'
+pipeline {
+  agent { docker { image 'maven:3.9-eclipse-temurin-17' } }
+  options { skipDefaultCheckout(false) }
+  stages {
+    stage('Build & Test') {
+      steps {
+        sh 'mvn -B -e -DskipTests=false clean package'
+      }
     }
-    stages {
-        stage("init") {
-            steps {
-                script {
-                    gv = load "script.groovy"
-                }
-            }
-        }
-        stage("build jar") {
-            steps {
-                script {
-                    gv.buildJar()
-
-                }
-            }
-        }
-
-        stage("build image") {
-            steps {
-                script {
-                    gv.buildImage()
-                }
-            }
-        }
-
-        stage("deploy") {
-            steps {
-                script {
-                    gv.deployApp()
-                }
-            }
-        }               
+  }
+  post {
+    always {
+      junit '**/target/surefire-reports/*.xml'
+      archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
     }
-} 
+  }
+}
