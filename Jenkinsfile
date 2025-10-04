@@ -1,17 +1,30 @@
-pipeline {
-  agent { docker { image 'maven:3.9-eclipse-temurin-17' } }
-  options { skipDefaultCheckout(false) }
-  stages {
-    stage('Build & Test') {
-      steps {
-        sh 'mvn -B -e -DskipTests=false clean package'
-      }
+#!/usr/bin.env groovy
+
+pipeline {   
+    agent any
+    stages {
+        stage("test") {
+            steps {
+                script {
+                    echo "Testing the application..."
+
+                }
+            }
+        }
+        stage("build") {
+            steps {
+                script {
+                    echo "Building the application..."
+                }
+            }
+        }
+
+        stage("deploy") {
+            steps {
+                script {
+                    echo "Deploying the application..."
+                }
+            }
+        }               
     }
-  }
-  post {
-    always {
-      junit '**/target/surefire-reports/*.xml'
-      archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
-    }
-  }
-}
+} 
