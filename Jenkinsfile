@@ -9,7 +9,9 @@ pipeline {
     stages {
         stage("init") {
             steps {
-                gv = load "script.groovy"
+                script{
+                   gv = load "script.groovy"
+                }
             }
         }
        stage("build") {
@@ -26,12 +28,16 @@ pipeline {
                 }
             }
             steps {
-                gv.testApp()
+                script{
+                   gv.testApp()
+                }
             }
         }
         stage("deploy") {
             steps {
-                gv.deployApp()
+                 script{
+                    gv.deployApp()
+                }
             }
         }               
     }
