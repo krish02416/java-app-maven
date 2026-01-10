@@ -27,7 +27,8 @@ pipeline {
         stage("build image") {
             steps {
                 script{
-                    buildImage()
+                    buildImage 'harikrishnan20010616/demo-app-3.0'
+
                 }
             }
         }
